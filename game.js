@@ -13,6 +13,8 @@ var prevTime = Date.now();
 
 var timeString;
 
+var mouse;
+
 var player = {
 	color: "#00A",
 	x: 160,
@@ -26,6 +28,8 @@ var player = {
 		context.fillRect(this.x, this.y, this.width, this.height);
 	}
 };
+
+var menu;
 
 //Initialize variables and start the game
 var Init = function()
@@ -55,10 +59,17 @@ var Init = function()
 
 	canvases.appendTo('body');
 
+	menu = new Menu(100, 0, CANVAS_WIDTH - 200, CANVAS_HEIGHT, '08F');
+
 	//Start game loop
 	Tick();
 	console.log("Initialization exited.")
 };
+
+function canvasClicked()
+{
+
+	}
 
 //The game loop
 var Tick = function()
@@ -98,21 +109,13 @@ var Clear = function(colour)
 
 var Update = function(deltaTime)
 {
-	//display the delta time only when the space key is held down
-	if (keydown.space)
-	{
-		timeString = "Time difference: " + deltaTime;
-	}
-	else
-	{
-		timeString = "";
-	}
+	menu.update(deltaTime);
 };
 
 var Draw = function()
 {
 	player.draw();
-	context.fillText(timeString, 50, 50);
+	menu.draw();
 };
 
 Init();
