@@ -9,18 +9,25 @@ function Menu(x, y, width, height, colour)
 	this.height = height || 0;
 	this.colour = colour || 'F00';
 
+
+	var that = this;
+
 	function makeBackground(radius)
 	{
-		background = context.createRadialGradient(this.x + this.width, this.x + this.height, radius);
-		background.addColorStop(0, '000');
-		background.addColorStop(1, this.colour);
+		background = context.createRadialGradient(that.x + that.width, that.x + that.height, 1, that.x + that.width, that.x + that.height, radius);
+		background.addColorStop(0, that.colour);
+		background.addColorStop(1, 'black');
 	}
 
 	this.draw = function()
 	{
 		context.save();
-		context.fill = background;
-		context.fillRect(this.x, this.y, this.width, this.height);
+		context.fillStyle = background;
+		context.shadowColor = '111';
+		context.shadowOffsetX = 16;
+		context.shadowOffsetY = 0;
+		context.shadowBlur = 20;
+		context.fillRect(that.x, that.y, that.width, that.height);
 		context.restore();
 	};
 
@@ -28,12 +35,22 @@ function Menu(x, y, width, height, colour)
 	{
 		//pulse the background
 		backgroundPulseMs += deltaTime;
-		var maxRadius = this.width / 2;
-		var minRadius = this.width / 8;
-		var phaseMs = 8000;
-		var radius = minRadius + Math.abs((backgroundPulseMs / phaseMs) - phaseMs / 2) * maxRadius;
+		var maxRadius = Math.max(this.width, this.height);
+		var minRadius = maxRadius / 2;
+		var phaseMs = 16000;
+		var radius = Math.floor(minRadius + (Math.sin((backgroundPulseMs / phaseMs) * 2 * Math.PI) + 1) / 2 * (maxRadius - minRadius));
 		backgroundPulseMs = loop(backgroundPulseMs, 0, phaseMs);
 		makeBackground(radius);
 	}
+
+	function loop(value, change, maxValue)
+	{
+		var result = value + change;
+		while (result < 0)
+		{
+			result += maxValue;
+		}
+		return result % maxValue;
+	};
 
 }

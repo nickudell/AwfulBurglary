@@ -1,6 +1,6 @@
 //Canvas properties
-var CANVAS_WIDTH = 320;
-var CANVAS_HEIGHT = 200;
+var CANVAS_WIDTH = 640;
+var CANVAS_HEIGHT = 800;
 
 var canvas;
 var context;
@@ -8,12 +8,15 @@ var context;
 //Game loop properties
 var loopTimeout;
 var isPlaying = true;
-var FPS = 50;
+var FPS = 30;
 var prevTime = Date.now();
 
 var timeString;
 
-var mouse;
+var mouse = {
+	x: 0,
+	y: 0
+};
 
 var player = {
 	color: "#00A",
@@ -52,7 +55,6 @@ var Init = function()
 	{
 		mouse.x = e.offsetX;
 		mouse.y = e.offsetY;
-		mouse.currentCell = getCell(mouse.x, mouse.y);
 	})
 
 	context = canvas.getContext("2d");
@@ -78,7 +80,7 @@ var Tick = function()
 	var now = Date.now();
 	var deltaTime = now - prevTime;
 	prevTime = now;
-	Clear('AAAAFF');
+	Clear('222');
 	Update(deltaTime);
 	Draw()
 
@@ -97,14 +99,7 @@ var Clear = function(colour)
 {
 	//Set active colour to specified parameter
 	context.fillStyle = colour;
-	//start drawing
-	context.beginPath();
-	//draw rectangle from point (0,0) to (width, height)
-	context.rect(0, 0, CANVAS_WIDTH, CANVAS_WIDTH);
-	//end drawing
-	context.closePath();
-	//Fill the rectangle with the active colour
-	context.fill();
+	context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 };
 
 var Update = function(deltaTime)
